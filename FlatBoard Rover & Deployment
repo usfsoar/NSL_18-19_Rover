@@ -1,0 +1,97 @@
+
+int motor1 = 38;
+int motor2 = 36;
+int solenoids = A8;
+int deploymentMotors = A9;
+char c;
+
+
+void setup() {
+  pinMode(motor1, OUTPUT);
+  digitalWrite(motor1, HIGH);
+  pinMode(motor2, OUTPUT);
+  digitalWrite(motor2, HIGH);
+  pinMode(solenoids, OUTPUT);
+  digitalWrite(solenoids, HIGH);
+  pinMode(deploymentMotors, OUTPUT);
+  digitalWrite(deploymentMotors, HIGH);
+  Serial.begin(9600); 
+}
+
+void loop() {
+ if (Serial.available() > 0)
+ {
+  c = Serial.read();
+  inputOption(c);
+ }
+ }
+
+void deploy()
+{
+  digitalWrite(solenoids, LOW);
+  delay(500);
+  digitalWrite(deploymentMotors, LOW);
+  delay(5000);
+  digitalWrite(solenoids, HIGH);
+  digitalWrite(deploymentMotors, HIGH);
+  delay(1000);
+  drive();
+}
+
+void drive()
+{
+  right();
+  delay(500);
+  
+  left();
+  delay(500);
+  
+  stop();
+  delay(500);
+  
+  forward();
+  delay(5000);
+  
+  stop();
+}
+void right()
+{
+    digitalWrite(motor1, LOW); //low is RELAY ON
+    digitalWrite(motor2, HIGH);
+}
+
+void left()
+{
+    digitalWrite(motor1, HIGH);
+    digitalWrite(motor2, LOW);
+}
+
+void stop()
+{
+    digitalWrite(motor2, HIGH);     
+    digitalWrite(motor1, HIGH);
+}
+void forward()
+{
+    digitalWrite(motor2, LOW);     
+    digitalWrite(motor1, LOW);
+}
+
+void inputOption(char input)
+{
+    if (input == 'd'){
+    right();
+    }
+    else if(input == 'a'){
+    left();
+    }
+    else if (input == 's'){
+    stop();
+    }
+    else if (input == 'w'){
+    forward();
+    }
+    else if (input == '1'){
+    deploy();
+    }
+}
