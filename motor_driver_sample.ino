@@ -29,7 +29,7 @@ int convertPercent(double input){
     return (input * 2.55); //return a pwm value
 }
 
-void setSpeed(double leftPercent, double rightPercent){ //sets speed of left and right wheel (0-100%)
+void setSpeedPercent(double leftPercent, double rightPercent){ //sets speed of left and right wheel (0-100%)
 
   int leftSpeed = convertPercent(leftPercent); //converts percent to pwm values
   int rightSpeed = convertPercent(rightPercent);
@@ -38,23 +38,57 @@ void setSpeed(double leftPercent, double rightPercent){ //sets speed of left and
     digitalWrite(MOTOR1_IN1, LOW);
     analogWrite(MOTOR1_IN2, leftSpeed);
     Serial.print(leftSpeed);
+    Serial.print("Pos Left\n");
   }
   if(rightSpeed > 0){
     digitalWrite(MOTOR2_IN1, LOW);
     analogWrite(MOTOR2_IN2, rightSpeed);
     Serial.print(rightSpeed);
+    Serial.print("Pos Right\n");
     }
 
   if(leftSpeed < 0){
     digitalWrite(MOTOR1_IN2, LOW);
     analogWrite(MOTOR1_IN1, leftSpeed);
     Serial.print(leftSpeed);
+    Serial.print("Neg Left\n");
     }
 
   if(rightSpeed < 0){
     digitalWrite(MOTOR2_IN2, LOW);
     analogWrite(MOTOR2_IN1, rightSpeed);
     Serial.print(rightSpeed);
+    Serial.print("Neg Right\n");
+    }
+}
+
+void setSpeedPWM(int leftPWM, int rightPWM){ //sets speed of left and right wheel (0-100%)
+
+  if(leftPWM > 0){
+    digitalWrite(MOTOR1_IN1, LOW);
+    analogWrite(MOTOR1_IN2, leftPWM);
+    Serial.print(leftPWM);
+    Serial.print("Pos Left PWM\n");
+  }
+  if(rightPWM > 0){
+    digitalWrite(MOTOR2_IN1, LOW);
+    analogWrite(MOTOR2_IN2, rightPWM);
+    Serial.print(rightPWM);
+    Serial.print("Pos Right PWM\n");
+    }
+
+  if(leftPWM < 0){
+    digitalWrite(MOTOR1_IN2, LOW);
+    analogWrite(MOTOR1_IN1, leftPWM);
+    Serial.print(leftPWM);
+    Serial.print("Neg Left PWM\n");
+    }
+
+  if(rightPWM < 0){
+    digitalWrite(MOTOR2_IN2, LOW);
+    analogWrite(MOTOR2_IN1, rightPWM);
+    Serial.print(rightPWM);
+    Serial.print("Neg Right PWM\n");
     }
 }
 
@@ -66,11 +100,11 @@ void stop(){ //sets driver pwm to 0
 }
 
 void loop() { 
-  setSpeed(100, 100);
+  setSpeedPercent(100, 100);
   delay(1000);
   stop();
   delay(1000);
-  setSpeed(-100, -100);
+  setSpeedPWM(-100, -100);
   stop();
   delay(1000);
 }
