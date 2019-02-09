@@ -7,16 +7,12 @@
 
 void setup() {
   Serial.begin(9600);
-
   Serial.println("DRV8871 test");
-  
   pinMode(MOTOR1_IN1, OUTPUT);
   pinMode(MOTOR1_IN2, OUTPUT);
   pinMode(MOTOR2_IN1, OUTPUT);
   pinMode(MOTOR2_IN2, OUTPUT);
 }
-
-
 
 int convertPercent(double input){
 
@@ -62,7 +58,7 @@ void setSpeedPercent(double leftPercent, double rightPercent){ //sets speed of l
     }
 }
 
-void setSpeedPWM(int leftPWM, int rightPWM){ //sets speed of left and right wheel (0-100%)
+void setSpeedPWM(int leftPWM, int rightPWM){ //sets speed of left and right wheel via pwm value
 
   if(leftPWM > 0){
     digitalWrite(MOTOR1_IN1, LOW);
@@ -99,7 +95,7 @@ void stop(){ //sets driver pwm to 0
   digitalWrite(MOTOR2_IN2, LOW);
 }
 
-void loop() { 
+void loop() { //test code for arduino
   setSpeedPercent(100, 100);
   delay(1000);
   stop();
