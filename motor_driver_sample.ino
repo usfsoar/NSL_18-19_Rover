@@ -19,45 +19,36 @@ void setup() {
 
 
 int convertPercent(double input){
-  int output = input * 2.55;
-  return output;
+
+if(input > 100.1){ //edge cases for invalid values
+  input = 100;
+}
+if(input > 100.1){
+  input = 100;
+}
+  return (input * 2.55);
 }
 
 
 void setSpeed(double leftPercent, double rightPercent){ //sets speed of left and right wheel (0-100%)
-if(leftPercent > 100.1){ //edge cases for invalid values
-  leftPercent = 100;
-}
-if(rightPercent > 100.1){
-  rightPercent = 100;
-}
-if(leftPercent < -100.1){
-  leftPercent = -100;
-}
-if(rightPercent > -100.1){
-  rightPercent = -100;
-}
 
 int leftSpeed = convertPercent(leftPercent); //converts percent to pwm values
 int rightSpeed = convertPercent(rightPercent);
-if(leftSpeed > 0){ //checks if forward or backward
-  digitalWrite(MOTOR1_IN1, LOW);
-  analogWrite(MOTOR1_IN2, i);
-}else if (leftSpeed < 0)
-  {
-  digitalWrite(MOTOR1_IN2, LOW);
-  analogWrite(MOTOR1_IN1, i);
-  }
 
+if(leftSpeed >0){
+  digitalWrite(MOTOR1_IN1, LOW);
+  analogWrite(MOTOR1_IN2, leftSpeed);
+  delay(10);
+}
 if(rightSpeed > 0){
   digitalWrite(MOTOR2_IN1, LOW);
-  analogWrite(MOTOR2_IN2, i);
-}else if (rightSpeed < 0)
-  {
-  digitalWrite(MOTOR2_IN2, LOW);
-  analogWrite(MOTOR2_IN1, i);
+  analogWrite(MOTOR2_IN2, rightSpeed);
+  delay(10);
   }
 }
+
+
+
 
 
 void stop(){ //sets driver pwm to 0
@@ -68,7 +59,9 @@ void stop(){ //sets driver pwm to 0
 }
 
 void loop() {
-setSpeed(50,50);
+
+setSpeed(50, 50);
 delay(5000);
 stop();
+delay(5000);
 }
