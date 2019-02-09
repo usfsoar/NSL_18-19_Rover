@@ -30,7 +30,7 @@ void setSpeedPercent(double leftPercent, double rightPercent){ //sets speed of l
   int leftSpeed = convertPercent(leftPercent); //converts percent to pwm values
   int rightSpeed = convertPercent(rightPercent);
 
-  if(leftSpeed >0){
+  if(leftSpeed >0){ //For positive values
     digitalWrite(MOTOR1_IN1, LOW);
     analogWrite(MOTOR1_IN2, leftSpeed);
     Serial.print(leftSpeed);
@@ -43,7 +43,7 @@ void setSpeedPercent(double leftPercent, double rightPercent){ //sets speed of l
     Serial.print("Pos Right\n");
     }
 
-  if(leftSpeed < 0){
+  if(leftSpeed < 0){ //For negative values
     digitalWrite(MOTOR1_IN2, LOW);
     analogWrite(MOTOR1_IN1, leftSpeed);
     Serial.print(leftSpeed);
