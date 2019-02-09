@@ -45,11 +45,17 @@ if(rightSpeed > 0){
   analogWrite(MOTOR2_IN2, rightSpeed);
   delay(10);
   }
+
+if(leftSpeed < 0){
+  digitalWrite(MOTOR1_IN2, LOW);
+  analogWrite(MOTOR1_IN1, leftSpeed);
+  }
+
+if(rightSpeed < 0){
+  digitalWrite(MOTOR1_IN2, LOW);
+  analogWrite(MOTOR1_IN1, rightSpeed);
+  }
 }
-
-
-
-
 
 void stop(){ //sets driver pwm to 0
   digitalWrite(MOTOR1_IN1, LOW);
@@ -59,8 +65,7 @@ void stop(){ //sets driver pwm to 0
 }
 
 void loop() {
-
-setSpeed(50, 50);
+setSpeed(100, 100);
 delay(5000);
 stop();
 delay(5000);
