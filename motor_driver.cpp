@@ -1,8 +1,13 @@
 // Basic sketch for trying out the Adafruit DRV8871 Breakout
 #include "motor_driver.h"
 #include <Arduino.h>
-int motor_driver::convertPercent(double input){
 
+const byte MOTOR1_IN1 = 8; //declares motor 1 and 2 pins
+const byte MOTOR1_IN2 = 9;
+const byte MOTOR2_IN1 = 10;
+const byte MOTOR2_IN2 = 11;
+
+int motor_driver::convertPercent(double input){
   if(input > 100.1){ //edge cases for invalid values
     input = 100;
   }
@@ -83,4 +88,15 @@ void motor_driver::stop(){ //sets driver pwm to 0
   digitalWrite(MOTOR2_IN1, LOW);
   digitalWrite(MOTOR2_IN2, LOW);
   Serial.print("\nSTOP");
+}
+
+motor_driver::motor_driver(){ //constructor to set pins at outputs
+  pinMode(MOTOR1_IN1, OUTPUT);
+  pinMode(MOTOR1_IN2, OUTPUT);
+  pinMode(MOTOR2_IN1, OUTPUT);
+  pinMode(MOTOR2_IN2, OUTPUT);
+}
+
+motor_driver::~motor_driver(){
+//Empty
 }

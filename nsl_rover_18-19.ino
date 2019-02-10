@@ -8,13 +8,9 @@ char c;
 void setup() {
   Serial.begin(9600);
   Serial.println("NSL 18-19 Test\n");
-  pinMode(MOTOR1_IN1, OUTPUT);
-  pinMode(MOTOR1_IN2, OUTPUT);
-  pinMode(MOTOR2_IN1, OUTPUT);
-  pinMode(MOTOR2_IN2, OUTPUT);
 }
 
-void menu(char c){
+void menu(char c){ //menu for ease of changing functionality
     switch (c){
       case 'w':
         motor.setSpeedPercent(100,100);
