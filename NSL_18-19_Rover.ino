@@ -17,7 +17,6 @@ void menu(char c){ //menu for ease of changing functionality
         c = '0';
         break;
       case 'a':
-        motor.stop();
         motor.setSpeedPercent(0,100);
         c = '0';
         break;
@@ -25,12 +24,11 @@ void menu(char c){ //menu for ease of changing functionality
         motor.setSpeedPercent(-100,-100);
         break;
       case 'd':
-        motor.stop();
         motor.setSpeedPercent(100,0);
         c = '0';
         break;
       case ' ':
-        motor.stop();
+      motor.stop();
         c = '0';
         break;
     }

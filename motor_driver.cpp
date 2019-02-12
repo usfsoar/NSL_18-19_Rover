@@ -51,6 +51,18 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent){ //s
     rightSpeed *= -1;
     analogWrite(MOTOR2_IN1, rightSpeed);
     }
+
+    if(rightSpeed == 0){
+      digitalWrite(MOTOR2_IN1, LOW);
+      digitalWrite(MOTOR2_IN2, LOW);
+    }
+
+    if(leftSpeed == 0){
+      digitalWrite(MOTOR1_IN1, LOW);
+      digitalWrite(MOTOR1_IN2, LOW);
+    }
+
+
 }
 
 void motor_driver::setSpeedPWM(int leftPWM, int rightPWM){ //sets speed of left and right wheel via pwm value
@@ -82,6 +94,17 @@ void motor_driver::setSpeedPWM(int leftPWM, int rightPWM){ //sets speed of left 
     Serial.print("\nNeg Right PWM: ");
     Serial.print(rightPWM);
     }
+
+  if(rightPWM == 0){
+    digitalWrite(MOTOR2_IN1, LOW);
+    digitalWrite(MOTOR2_IN2, LOW);
+  }
+
+  if(leftPWM < 0){
+    digitalWrite(MOTOR1_IN1, LOW);
+    digitalWrite(MOTOR1_IN2, LOW);
+  }
+    
 }
 
 void motor_driver::stop(){ //sets driver pwm to 0
