@@ -5,8 +5,8 @@
 motor_driver motor;
 xbee xb;
 char c;
-#define DEPLOY1 12; //temp declaration for deployment
-#define DEPLOY2 13;
+#define DEPLOY1 12 //temp declaration for deployment
+#define DEPLOY2 13
 
 void setup() {
   Serial.begin(9600);
@@ -54,4 +54,4 @@ void menu(char c){ //menu for ease of changing functionality
 void loop() { //test code for arduino
 menu(xb.readInput());
 delay(10);
-}s
+}
