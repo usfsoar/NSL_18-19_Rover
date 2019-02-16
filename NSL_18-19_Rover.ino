@@ -2,18 +2,21 @@
 #include "motor_driver.h"
 #include "xbee.h"
 
+#define RELAY1 4
+#define RELAY2 5
+
+
 motor_driver motor;
 xbee xb;
 char c;
-#define DEPLOY1 12 //temp declaration for deployment
-#define DEPLOY2 13
+
 
 void setup() {
   Serial.begin(9600);
   Serial.println("NSL 18-19 Test\n");
 
-  pinMode(DEPLOY1, OUTPUT);
-  pinMode(DEPLOY2, OUTPUT);
+  pinMode(RELAY1, OUTPUT);
+  pinMode(RELAY2, OUTPUT);
 }
 
 void menu(char c){ //menu for ease of changing functionality
@@ -34,22 +37,23 @@ void menu(char c){ //menu for ease of changing functionality
         c = '0';
         break;
       case ' ':
-      motor.stop();
+        motor.stop();
         c = '0';
         break;
       case '1':
-        digitalWrite(DEPLOY1, HIGH);
-        digitalWrite(DEPLOY2, HIGH);
+        Serial.print("Both High\n");
+        digitalWrite(RELAY1, HIGH);
+        digitalWrite(RELAY2, LOW);
         c = '0';
         break;
       case '2':
-        digitalWrite(DEPLOY1, LOW);
-        digitalWrite(DEPLOY2, LOW);
+        Serial.print("Both Low\n");
+        digitalWrite(RELAY1, LOW);
+        digitalWrite(RELAY2, LOW);
         c = '0';
         break;
     }
 }
-
 
 void loop() { //test code for arduino
 menu(xb.readInput());
