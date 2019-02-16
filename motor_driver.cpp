@@ -7,20 +7,34 @@ const byte MOTOR1_IN2 = 9;
 const byte MOTOR2_IN1 = 10;
 const byte MOTOR2_IN2 = 11;
 
-const float MAX_PWM = 2.55;
+const int MAX_PWM = 255;
 
-int motor_driver::convertPercent(double input){
-  if(input > 100){
-    input = 100;
+/**
+ * @brief Convert a percentage between -100 and 100 to the equivalent PWM value.
+ * 
+ * Matches the range `[-100, 100]` to the range `[-MAX_PWM, MAX_PWM]`.
+ * 
+ * @param percent 
+ * @return int 
+ */
+int motor_driver::convertPercent(double percent){
+  if(percent > 100){
+    percent = 100;
   }
-  if(input < -100){
-    input = -100;
+  if(percent < -100){
+    percent = -100;
   }
   
-  return (input * MAX_PWM);
+  return (percent / 100.0 * MAX_PWM);
 }
 
-void motor_driver::setSpeedPercent(double leftPercent, double rightPercent){ //sets speed of left and right wheel (0-100%)
+/**
+ * @brief Set the motor speeds as a percentage of the maximum speed.
+ * 
+ * @param leftPercent Perent in range `[-100, 100]` to set the left motor.
+ * @param rightPercent Perent in range `[-100, 100]` to set the right motor.
+ */
+void motor_driver::setSpeedPercent(double leftPercent, double rightPercent){
 
   int leftSpeed = convertPercent(leftPercent); //converts percent to pwm values
   int rightSpeed = convertPercent(rightPercent);
@@ -68,6 +82,12 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent){ //s
 
 }
 
+/**
+ * @brief Set the motor speeds as a PWM value.
+ * 
+ * @param leftPWM Value in range `[-MAX_PWM, MAX_PWM]` to set the left motor.
+ * @param rightPWM Value in range `[-MAX_PWM, MAX_PWM]` to set the right motor.
+ */
 void motor_driver::setSpeedPWM(int leftPWM, int rightPWM){ //sets speed of left and right wheel via pwm value
 
   if(leftPWM > 0){
