@@ -7,14 +7,17 @@ const byte MOTOR1_IN2 = 9;
 const byte MOTOR2_IN1 = 10;
 const byte MOTOR2_IN2 = 11;
 
+const float MAX_PWM = 2.55;
+
 int motor_driver::convertPercent(double input){
-  if(input > 100.1){ //edge cases for invalid values
+  if(input > 100){
     input = 100;
   }
   if(input < -100){
     input = -100;
   }
-    return (input * 2.55); //return a pwm value
+  
+  return (input * MAX_PWM);
 }
 
 void motor_driver::setSpeedPercent(double leftPercent, double rightPercent){ //sets speed of left and right wheel (0-100%)
