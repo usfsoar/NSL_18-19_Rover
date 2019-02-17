@@ -13,7 +13,8 @@ const int MAX_PWM = 255;
  * @brief Convert a percentage between -100 and 100 to the equivalent PWM value.
  *
  * Matches the range `[-100, 100]` to the range `[-MAX_PWM, MAX_PWM]`. Does not
- * truncate values outside the allowable range (ie, 110 input will output 280)
+ * truncate values outside the allowable range (ie, 110 input will output 280).
+ * Output values are rounded to the nearest whole integer.
  *
  * @param percent
  * @return int
@@ -26,7 +27,8 @@ int motor_driver::convertPercent(double percent) {
     percent = -100;
   }
 
-  return (percent / 100.0 * MAX_PWM);
+  // Float * int is float, which must be rounded because PWM needs int.
+  return round(percent / 100.0 * MAX_PWM);
 }
 
 /**
