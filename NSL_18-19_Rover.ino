@@ -31,34 +31,28 @@ void menu(char c){
     switch (c){
       case 'w':
         motor.setSpeedPercent(100,100);
-        c = '0';
         break;
       case 'a':
         motor.setSpeedPercent(0,100);
-        c = '0';
         break;
       case 's':
         motor.setSpeedPercent(-100,-100);
         break;
       case 'd':
         motor.setSpeedPercent(100,0);
-        c = '0';
         break;
       case ' ':
         motor.stop();
-        c = '0';
         break;
       case '1':
         Serial.print("Both High\n");
         digitalWrite(RELAY_1, HIGH);
         digitalWrite(RELAY_2, LOW);
-        c = '0';
         break;
       case '2':
         Serial.print("Both Low\n");
         digitalWrite(RELAY_1, LOW);
         digitalWrite(RELAY_2, LOW);
-        c = '0';
         break;
     }
 }
