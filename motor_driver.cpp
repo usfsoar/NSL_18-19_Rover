@@ -11,12 +11,10 @@ const byte MOTOR1_IN2 = 9;
 const byte MOTOR2_IN1 = 10;
 const byte MOTOR2_IN2 = 11;
 
-const int MAX_PWM = 255;
-
 /**
  * @brief Convert a percentage between -100 and 100 to the equivalent PWM value.
  *
- * Matches the range `[-100, 100]` to the range `[-MAX_PWM, MAX_PWM]`. Does not
+ * Matches the range `[-100, 100]` to the range `[-255, 255]`. Does not
  * truncate values outside the allowable range (ie, 110 input will output 280).
  * Output values are rounded to the nearest whole integer.
  *
@@ -32,7 +30,7 @@ int motor_driver::convertPercent(double percent) {
   }
 
   // Float * int is float, which must be rounded because PWM needs int.
-  return round(percent / 100.0 * MAX_PWM);
+  return round(percent / 100.0 * 255);
 }
 
 /**
@@ -97,10 +95,10 @@ int motor_driver::setPWM(int pwmValue, int pinIfPositive, int pinIfNegative) {
 
   // By changing the pwmValue here instead of the output variables, we can
   // return the truncated value for output use.
-  if (pwmValue > MAX_PWM) {
-    pwmValue = MAX_PWM;
-  } else if (pwmValue < -MAX_PWM) {
-    pwmValue = -MAX_PWM;
+  if (pwmValue > 255) {
+    pwmValue = 255;
+  } else if (pwmValue < -255) {
+    pwmValue = -255;
   }
   
   if (pwmValue > 0) {
