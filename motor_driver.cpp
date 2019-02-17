@@ -6,7 +6,7 @@
 #include "motor_driver.h"
 #include <Arduino.h>
 
-const byte MOTOR1_IN1 = 8;  // declares motor 1 and 2 pins
+const byte MOTOR1_IN1 = 8
 const byte MOTOR1_IN2 = 9;
 const byte MOTOR2_IN1 = 10;
 const byte MOTOR2_IN2 = 11;
