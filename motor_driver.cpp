@@ -6,7 +6,7 @@
 #include "motor_driver.h"
 #include <Arduino.h>
 
-const byte MOTOR1_IN1 = 8
+const byte MOTOR1_IN1 = 8;
 const byte MOTOR1_IN2 = 9;
 const byte MOTOR2_IN1 = 10;
 const byte MOTOR2_IN2 = 11;
@@ -52,7 +52,7 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
   Serial.print(rightPercent);
   Serial.print("%%");
 
-  setSpeedPWM(leftSpeed, rightSpeed)
+  setSpeedPWM(leftSpeed, rightSpeed);
 }
 
 /**
