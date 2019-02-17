@@ -12,6 +12,45 @@ const byte MOTOR2_IN1 = 10;
 const byte MOTOR2_IN2 = 11;
 
 /**
+ * @brief Set PWM output. Allows for separate positive and negative outputs.
+ * 
+ * If the PWM value is in the range (0, inf], will set the pinIfPositive pin to
+ * the value (truncating values greater than 255 to 255). If the PWM value is
+ * in the range (-inf, 0), will set the negative pin, again truncating. The
+ * other pin will always be set to 0.
+ * 
+ * @param pwmValue Value to use, on the range [-255, 255]. Other values will be
+ *   truncated to that range.
+ * @param pinIfPositive Pin to set if the value is positive.
+ * @param pinIfNegative Pin to set if the value is negative.
+ * 
+ * @returns The input value, unless the input value falls outside the range
+ *   [-255, 255], in which case it returns the truncated value.
+ */
+int motor_driver::setPWM(int pwmValue, int pinIfPositive, int pinIfNegative) {
+  int positiveOutput = 0, negativeOutput = 0;
+
+  // By changing the pwmValue here instead of the output variables, we can
+  // return the truncated value for output use.
+  if (pwmValue > 255) {
+    pwmValue = 255;
+  } else if (pwmValue < -255) {
+    pwmValue = -255;
+  }
+  
+  if (pwmValue > 0) {
+    positiveOutput = pwmValue;
+  } if (pwmValue < 0) {
+    negativeOutput = -pwmValue;
+  }
+
+  analogWrite(pinIfPositive, positiveOutput);
+  analogWrite(pinIfNegative, negativeOutput);
+
+  return pwmValue;
+}
+
+/**
  * @brief Convert a percentage between -100 and 100 to the equivalent PWM value.
  *
  * Matches the range `[-100, 100]` to the range `[-255, 255]`. Does not
@@ -65,52 +104,13 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
  * @param rightPWM Value to set the right motor.
  */
 void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
-  truncatedLeftPWM = setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
-  truncatedLeftPWM = setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
+  int truncatedLeftPWM = setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
+  int truncatedRightPWM = setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
 
   Serial.println("Set left motor PWM to: ");
-  Serial.print(leftPWM);
+  Serial.print(truncatedLeftPWM);
   Serial.println("Set right motor PWM to: ");
-  Serial.print(rightPWM);
-}
-
-/**
- * @brief Set PWM output. Allows for separate positive and negative outputs.
- * 
- * If the PWM value is in the range (0, inf], will set the pinIfPositive pin to
- * the value (truncating values greater than 255 to 255). If the PWM value is
- * in the range (-inf, 0), will set the negative pin, again truncating. The
- * other pin will always be set to 0.
- * 
- * @param pwmValue Value to use, on the range [-255, 255]. Other values will be
- *   truncated to that range.
- * @param pinIfPositive Pin to set if the value is positive.
- * @param pinIfNegative Pin to set if the value is negative.
- * 
- * @returns The input value, unless the input value falls outside the range
- *   [-255, 255], in which case it returns the truncated value.
- */
-int motor_driver::setPWM(int pwmValue, int pinIfPositive, int pinIfNegative) {
-  int positiveOutput = 0, negativeOutput = 0;
-
-  // By changing the pwmValue here instead of the output variables, we can
-  // return the truncated value for output use.
-  if (pwmValue > 255) {
-    pwmValue = 255;
-  } else if (pwmValue < -255) {
-    pwmValue = -255;
-  }
-  
-  if (pwmValue > 0) {
-    positiveOutput = pwmValue;
-  } if (pwmValue < 0) {
-    negativeOutput = -pwmValue;
-  }
-
-  analogWrite(pinIfPositive, positiveOutput);
-  analogWrite(pinIfNegative, negativeOutput);
-
-  return pwmValue;
+  Serial.print(truncatedRightPWM);
 }
 
 /**
