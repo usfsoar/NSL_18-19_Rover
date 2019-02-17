@@ -82,30 +82,40 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
 /**
  * @brief Set the motor speeds as a PWM value.
  *
- * @param leftPWM Value in range `[-MAX_PWM, MAX_PWM]` to set the left motor.
- * @param rightPWM Value in range `[-MAX_PWM, MAX_PWM]` to set the right motor.
+ * Values should be on range [-255, 255]. Values greater than 255 or less than
+ * -255 will be truncated to the range.
+ * 
+ * @param leftPWM Value to set the left motor.
+ * @param rightPWM Value to set the right motor.
  */
 void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
-  if (leftPWM > 0) {
-    analogWrite(MOTOR1_IN1, 0);
-    analogWrite(MOTOR1_IN2, leftPWM);
+  int motor_1_1 = 0, motor_1_2 = 0;
+  int motor_2_1 = 0, motor_2_2 = 0;
+
+  if (leftPWM > MAX_PWM) {
+    motor_1_2 = MAX_PWM;
+  } else if (leftPWM > 0) {
+    motor_1_2 = leftPWM;
+  } else if (leftPWM < -MAX_PWM) {
+    motor_1_1 = MAX_PWM;
   } else {
-    analogWrite(MOTOR1_IN1, leftPWM);
-    analogWrite(MOTOR1_IN2, 0);
+    motor_1_1 = -leftPWM;
+  }
+  
+  if (rightPWM > MAX_PWM) {
+    motor_2_2 = MAX_PWM;
+  } else if (rightPWM > 0) {
+    motor_2_2 = rightPWM;
+  } else if (rightPWM < -MAX_PWM) {
+    motor_2_1 = MAX_PWM;
+  } else {
+    motor_2_1 = -rightPWM;
   }
 
-  if (rightPWM > 0) {
-    analogWrite(MOTOR2_IN1, 0);
-    analogWrite(MOTOR2_IN2, rightPWM);
-  } else {
-    analogWrite(MOTOR2_IN1, rightPWM);
-    analogWrite(MOTOR2_IN2, 0);
-  }
-
-  Serial.print("Left PWM: ");
-  Serial.print(leftPWM);
-  Serial.print("Right PWM: ");
-  Serial.print(rightPWM);
+  analogWrite(MOTOR1_IN1, motor_1_1);
+  analogWrite(MOTOR1_IN2, motor_1_2);
+  analogWrite(MOTOR2_IN1, motor_2_1);
+  analogWrite(MOTOR2_IN2, motor_2_2);
 }
 
 /**
