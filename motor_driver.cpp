@@ -121,7 +121,7 @@ void motor_driver::setSpeedPWM(
     digitalWrite(MOTOR2_IN2, LOW);
   }
 
-  if (leftPWM < 0) {
+  if (leftPWM == 0) {
     digitalWrite(MOTOR1_IN1, LOW);
     digitalWrite(MOTOR1_IN2, LOW);
   }
