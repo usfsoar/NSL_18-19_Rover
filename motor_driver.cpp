@@ -1,4 +1,8 @@
-// Basic sketch for trying out the Adafruit DRV8871 Breakout
+/**
+ * @file motor_driver.cpp
+ * @brief Methods for interacting with PWM motor driver.
+ */
+
 #include "motor_driver.h"
 #include <Arduino.h>
 
