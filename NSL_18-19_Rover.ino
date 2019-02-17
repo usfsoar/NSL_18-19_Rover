@@ -2,8 +2,8 @@
 #include "motor_driver.h"
 #include "xbee.h"
 
-const byte RELAY1 = 4;
-const byte RELAY2 = 5;
+const byte RELAY_1 = 4;
+const byte RELAY_2 = 5;
 
 motor_driver motor;
 xbee xb;
@@ -16,8 +16,8 @@ void setup() {
   Serial.begin(9600);
   Serial.println("NSL 18-19 Test\n");
 
-  pinMode(RELAY1, OUTPUT);
-  pinMode(RELAY2, OUTPUT);
+  pinMode(RELAY_1, OUTPUT);
+  pinMode(RELAY_2, OUTPUT);
 }
 
 /**
