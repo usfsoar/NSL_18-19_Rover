@@ -89,45 +89,53 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
  * @param rightPWM Value to set the right motor.
  */
 void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
-  int motor_1_1 = 0, motor_1_2 = 0;
-  int motor_2_1 = 0, motor_2_2 = 0;
+  setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
+  setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
 
-  if (leftPWM > MAX_PWM) {
-    motor_1_2 = MAX_PWM;
-  } else if (leftPWM > 0) {
-    motor_1_2 = leftPWM;
-  } else if (leftPWM < -MAX_PWM) {
-    motor_1_1 = MAX_PWM;
+  Serial.println("Set left motor to: ");
+  Serial.print(leftPWM);
+  Serial.println("Set right motor to: ");
+  Serial.print(rightPWM);
+}
+
+/**
+ * @brief Set PWM output. Allows for separate positive and negative outputs.
+ * 
+ * If the PWM value is in the range (0, inf], will set the pinIfPositive pin to
+ * the value (truncating values greater than 255 to 255). If the PWM value is
+ * in the range (-inf, 0), will set the negative pin, again truncating. The
+ * other pin will always be set to 0.
+ * 
+ * @param pwmValue Value to use, on the range [-255, 255]. Other values will be
+ *   truncated to that range.
+ * @param pinIfPositive Pin to set if the value is positive.
+ * @param pinIfNegative Pin to set if the value is negative.
+ */
+void motor_driver::setPWM(int pwmValue, int pinIfPositive, int pinIfNegative) {
+  int positiveOutput = 0, negativeOutput = 0;
+
+  if (pwmValue > MAX_PWM) {
+    positiveOutput = MAX_PWM;
+  } else if (pwmValue > 0) {
+    positiveOutput = pwmValue;
+  } else if (pwmValue < -MAX_PWM) {
+    negativeOutput = MAX_PWM;
   } else {
-    motor_1_1 = -leftPWM;
-  }
-  
-  if (rightPWM > MAX_PWM) {
-    motor_2_2 = MAX_PWM;
-  } else if (rightPWM > 0) {
-    motor_2_2 = rightPWM;
-  } else if (rightPWM < -MAX_PWM) {
-    motor_2_1 = MAX_PWM;
-  } else {
-    motor_2_1 = -rightPWM;
+    negativeOutput = -pwmValue;
   }
 
-  analogWrite(MOTOR1_IN1, motor_1_1);
-  analogWrite(MOTOR1_IN2, motor_1_2);
-  analogWrite(MOTOR2_IN1, motor_2_1);
-  analogWrite(MOTOR2_IN2, motor_2_2);
+  analogWrite(pinIfPositive, positiveOutput);
+  analogWrite(pinIfNegative, negativeOutput);
 }
 
 /**
  * @brief Stop both motors.
  */
 void motor_driver::stop() {
-  // `LOW` sets driver PWM to 0
-  digitalWrite(MOTOR1_IN1, LOW);
-  digitalWrite(MOTOR1_IN2, LOW);
-  digitalWrite(MOTOR2_IN1, LOW);
-  digitalWrite(MOTOR2_IN2, LOW);
-  Serial.println("STOP");
+  setPWM(0, MOTOR1_IN2, MOTOR1_IN1);
+  setPWM(0, MOTOR2_IN2, MOTOR2_IN1);
+
+  Serial.println("Stopped both motors.");
 }
 
 /**
