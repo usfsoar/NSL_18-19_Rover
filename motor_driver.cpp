@@ -12,7 +12,8 @@ const int MAX_PWM = 255;
 /**
  * @brief Convert a percentage between -100 and 100 to the equivalent PWM value.
  *
- * Matches the range `[-100, 100]` to the range `[-MAX_PWM, MAX_PWM]`.
+ * Matches the range `[-100, 100]` to the range `[-MAX_PWM, MAX_PWM]`. Does not
+ * truncate values outside the allowable range (ie, 110 input will output 280)
  *
  * @param percent
  * @return int
@@ -30,53 +31,24 @@ int motor_driver::convertPercent(double percent) {
 
 /**
  * @brief Set the motor speeds as a percentage of the maximum speed.
+ * 
+ * Values outside of the typical percent range will be truncated to that range.
  *
  * @param leftPercent Perent in range `[-100, 100]` to set the left motor.
  * @param rightPercent Perent in range `[-100, 100]` to set the right motor.
  */
 void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
-  int leftSpeed = convertPercent(leftPercent);  // converts percent to pwm
-                                                // values
+  int leftSpeed = convertPercent(leftPercent);
   int rightSpeed = convertPercent(rightPercent);
 
-  if (leftSpeed > 0) {  // For positive values
-    digitalWrite(MOTOR1_IN1, LOW);
-    analogWrite(MOTOR1_IN2, leftSpeed);
-    Serial.print("\nPos Left %: ");
-    Serial.print(leftSpeed);
-  }
-  if (rightSpeed > 0) {
-    digitalWrite(MOTOR2_IN1, LOW);
-    analogWrite(MOTOR2_IN2, rightSpeed);
-    Serial.print("\nPos Right %: ");
-    Serial.print(rightSpeed);
-  }
+  Serial.println("Setting left motor to: ");
+  Serial.print(leftPercent);
+  Serial.print("%%");
+  Serial.println("Setting right motor to: ");
+  Serial.print(rightPercent);
+  Serial.print("%%");
 
-  if (leftSpeed < 0) {  // For negative values
-    digitalWrite(MOTOR1_IN2, LOW);
-    Serial.print("\nNeg Left %: ");
-    Serial.print(leftSpeed);
-    leftSpeed *= -1;  // set the negative value back to positve
-    analogWrite(MOTOR1_IN1, leftSpeed);
-  }
-
-  if (rightSpeed < 0) {
-    digitalWrite(MOTOR2_IN2, LOW);
-    Serial.print("\nNeg Right %: ");
-    Serial.print(rightSpeed);
-    rightSpeed *= -1;
-    analogWrite(MOTOR2_IN1, rightSpeed);
-  }
-
-  if (rightSpeed == 0) {
-    digitalWrite(MOTOR2_IN1, LOW);
-    digitalWrite(MOTOR2_IN2, LOW);
-  }
-
-  if (leftSpeed == 0) {
-    digitalWrite(MOTOR1_IN1, LOW);
-    digitalWrite(MOTOR1_IN2, LOW);
-  }
+  setSpeedPWM(leftSpeed, rightSpeed)
 }
 
 /**
@@ -89,12 +61,12 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
  * @param rightPWM Value to set the right motor.
  */
 void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
-  setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
-  setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
+  truncatedLeftPWM = setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
+  truncatedLeftPWM = setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
 
-  Serial.println("Set left motor to: ");
+  Serial.println("Set left motor PWM to: ");
   Serial.print(leftPWM);
-  Serial.println("Set right motor to: ");
+  Serial.println("Set right motor PWM to: ");
   Serial.print(rightPWM);
 }
 
@@ -110,22 +82,31 @@ void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
  *   truncated to that range.
  * @param pinIfPositive Pin to set if the value is positive.
  * @param pinIfNegative Pin to set if the value is negative.
+ * 
+ * @returns The input value, unless the input value falls outside the range
+ *   [-255, 255], in which case it returns the truncated value.
  */
-void motor_driver::setPWM(int pwmValue, int pinIfPositive, int pinIfNegative) {
+int motor_driver::setPWM(int pwmValue, int pinIfPositive, int pinIfNegative) {
   int positiveOutput = 0, negativeOutput = 0;
 
+  // By changing the pwmValue here instead of the output variables, we can
+  // return the truncated value for output use.
   if (pwmValue > MAX_PWM) {
-    positiveOutput = MAX_PWM;
-  } else if (pwmValue > 0) {
-    positiveOutput = pwmValue;
+    pwmValue = MAX_PWM;
   } else if (pwmValue < -MAX_PWM) {
-    negativeOutput = MAX_PWM;
-  } else {
+    pwmValue = -MAX_PWM;
+  }
+  
+  if (pwmValue > 0) {
+    positiveOutput = pwmValue;
+  } if (pwmValue < 0) {
     negativeOutput = -pwmValue;
   }
 
   analogWrite(pinIfPositive, positiveOutput);
   analogWrite(pinIfNegative, negativeOutput);
+
+  return pwmValue;
 }
 
 /**
