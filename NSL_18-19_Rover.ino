@@ -2,8 +2,8 @@
 #include "motor_driver.h"
 #include "xbee.h"
 
-#define RELAY1 4
-#define RELAY2 5
+const byte RELAY1 = 4;
+const byte RELAY2 = 5;
 
 
 motor_driver motor;
