@@ -7,7 +7,6 @@ const byte RELAY_2 = 5;
 
 motor_driver motor;
 xbee xb;
-char c;
 
 /**
  * @brief Automatically runs when Arduino initializes.
