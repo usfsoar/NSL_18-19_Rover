@@ -1,5 +1,8 @@
-# NSL_18-19_Rover
+# NSL_18-19_Rover [![Build Status](https://travis-ci.org/usfsoar/NSL_18-19_Rover.svg?branch=master)](https://travis-ci.org/usfsoar/NSL_18-19_Rover)
 Code for the rover for NASA Student Launch 2018-19.
+
+_Note_: Build status (above) confirms that the latest code compiles on Arduino,
+not that it necessarily behaves as expected.
 
 ## Instructions
 Download all the files and compile `nsl_rover_18-19.ino` using the Arduino IDE.
