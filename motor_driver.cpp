@@ -1,127 +1,138 @@
-// Basic sketch for trying out the Adafruit DRV8871 Breakout
+/**
+ * @file motor_driver.cpp
+ * @brief Methods for interacting with PWM motor driver.
+ */
+
 #include "motor_driver.h"
 #include <Arduino.h>
 
-const byte MOTOR1_IN1 = 8; //declares motor 1 and 2 pins
+const byte MOTOR1_IN1 = 8;
 const byte MOTOR1_IN2 = 9;
 const byte MOTOR2_IN1 = 10;
 const byte MOTOR2_IN2 = 11;
 
-int motor_driver::convertPercent(double input){
-  if(input > 100.1){ //edge cases for invalid values
-    input = 100;
+/**
+ * @brief Set PWM output. Allows for separate positive and negative outputs.
+ * 
+ * If the PWM value is in the range (0, inf], will set the pinIfPositive pin to
+ * the value (truncating values greater than 255 to 255). If the PWM value is
+ * in the range (-inf, 0), will set the negative pin, again truncating. The
+ * other pin will always be set to 0.
+ * 
+ * @param pwmValue Value to use, on the range [-255, 255]. Other values will be
+ *   truncated to that range.
+ * @param pinIfPositive Pin to set if the value is positive.
+ * @param pinIfNegative Pin to set if the value is negative.
+ * 
+ * @returns The input value, unless the input value falls outside the range
+ *   [-255, 255], in which case it returns the truncated value.
+ */
+int motor_driver::setPWM(int pwmValue, int pinIfPositive, int pinIfNegative) {
+  int positiveOutput = 0, negativeOutput = 0;
+
+  // By changing the pwmValue here instead of the output variables, we can
+  // return the truncated value for output use.
+  if (pwmValue > 255) {
+    pwmValue = 255;
+  } else if (pwmValue < -255) {
+    pwmValue = -255;
   }
-  if(input < -100){
-    input = -100;
+  
+  if (pwmValue > 0) {
+    positiveOutput = pwmValue;
+  } if (pwmValue < 0) {
+    negativeOutput = -pwmValue;
   }
-    return (input * 2.55); //return a pwm value
+
+  analogWrite(pinIfPositive, positiveOutput);
+  analogWrite(pinIfNegative, negativeOutput);
+
+  return pwmValue;
 }
 
-void motor_driver::setSpeedPercent(double leftPercent, double rightPercent){ //sets speed of left and right wheel (0-100%)
+/**
+ * @brief Convert a percentage between -100 and 100 to the equivalent PWM value.
+ *
+ * Matches the range `[-100, 100]` to the range `[-255, 255]`. Does not
+ * truncate values outside the allowable range (ie, 110 input will output 280).
+ * Output values are rounded to the nearest whole integer.
+ *
+ * @param percent
+ * @return int
+ */
+int motor_driver::convertPercent(double percent) {
+  if (percent > 100) {
+    percent = 100;
+  }
+  if (percent < -100) {
+    percent = -100;
+  }
 
-  int leftSpeed = convertPercent(leftPercent); //converts percent to pwm values
+  // Float * int is float, which must be rounded because PWM needs int.
+  return round(percent / 100.0 * 255);
+}
+
+/**
+ * @brief Set the motor speeds as a percentage of the maximum speed.
+ * 
+ * Values outside of the typical percent range will be truncated to that range.
+ *
+ * @param leftPercent Perent in range `[-100, 100]` to set the left motor.
+ * @param rightPercent Perent in range `[-100, 100]` to set the right motor.
+ */
+void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
+  int leftSpeed = convertPercent(leftPercent);
   int rightSpeed = convertPercent(rightPercent);
 
-  if(leftSpeed >0){ //For positive values
-    digitalWrite(MOTOR1_IN1, LOW);
-    analogWrite(MOTOR1_IN2, leftSpeed);
-    Serial.print("\nPos Left %: ");
-    Serial.print(leftSpeed);
-  }
-  if(rightSpeed > 0){
-    digitalWrite(MOTOR2_IN1, LOW);
-    analogWrite(MOTOR2_IN2, rightSpeed);
-    Serial.print("\nPos Right %: ");
-    Serial.print(rightSpeed);
-    }
+  Serial.println("Setting left motor to: ");
+  Serial.print(leftPercent);
+  Serial.print("%%");
+  Serial.println("Setting right motor to: ");
+  Serial.print(rightPercent);
+  Serial.print("%%");
 
-  if(leftSpeed < 0){ //For negative values
-    digitalWrite(MOTOR1_IN2, LOW);
-    Serial.print("\nNeg Left %: ");
-    Serial.print(leftSpeed);
-    leftSpeed *= -1; //set the negative value back to positve
-    analogWrite(MOTOR1_IN1, leftSpeed);
-    
-    }
-
-  if(rightSpeed < 0){
-    digitalWrite(MOTOR2_IN2, LOW);
-    Serial.print("\nNeg Right %: ");
-    Serial.print(rightSpeed);
-    rightSpeed *= -1;
-    analogWrite(MOTOR2_IN1, rightSpeed);
-    }
-
-    if(rightSpeed == 0){
-      digitalWrite(MOTOR2_IN1, LOW);
-      digitalWrite(MOTOR2_IN2, LOW);
-    }
-
-    if(leftSpeed == 0){
-      digitalWrite(MOTOR1_IN1, LOW);
-      digitalWrite(MOTOR1_IN2, LOW);
-    }
-
-
+  setSpeedPWM(leftSpeed, rightSpeed);
 }
 
-void motor_driver::setSpeedPWM(int leftPWM, int rightPWM){ //sets speed of left and right wheel via pwm value
+/**
+ * @brief Set the motor speeds as a PWM value.
+ *
+ * Values should be on range [-255, 255]. Values greater than 255 or less than
+ * -255 will be truncated to the range.
+ * 
+ * @param leftPWM Value to set the left motor.
+ * @param rightPWM Value to set the right motor.
+ */
+void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
+  int truncatedLeftPWM = setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
+  int truncatedRightPWM = setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
 
-  if(leftPWM > 0){
-    digitalWrite(MOTOR1_IN1, LOW);
-    analogWrite(MOTOR1_IN2, leftPWM);
-    Serial.print("\nPos Left PWM: ");
-    Serial.print(leftPWM);
-  }
-  if(rightPWM > 0){
-    digitalWrite(MOTOR2_IN1, LOW);
-    analogWrite(MOTOR2_IN2, rightPWM);
-    Serial.print("\nPos Right PWM: ");
-    Serial.print(rightPWM);
-    
-    }
-
-  if(leftPWM < 0){
-    digitalWrite(MOTOR1_IN2, LOW);
-    analogWrite(MOTOR1_IN1, leftPWM);
-    Serial.print("\nNeg Left PWM: ");
-    Serial.print(leftPWM);
-    }
-
-  if(rightPWM < 0){
-    digitalWrite(MOTOR2_IN2, LOW);
-    analogWrite(MOTOR2_IN1, rightPWM);
-    Serial.print("\nNeg Right PWM: ");
-    Serial.print(rightPWM);
-    }
-
-  if(rightPWM == 0){
-    digitalWrite(MOTOR2_IN1, LOW);
-    digitalWrite(MOTOR2_IN2, LOW);
-  }
-
-  if(leftPWM < 0){
-    digitalWrite(MOTOR1_IN1, LOW);
-    digitalWrite(MOTOR1_IN2, LOW);
-  }
-    
+  Serial.println("Set left motor PWM to: ");
+  Serial.print(truncatedLeftPWM);
+  Serial.println("Set right motor PWM to: ");
+  Serial.print(truncatedRightPWM);
 }
 
-void motor_driver::stop(){ //sets driver pwm to 0
-  digitalWrite(MOTOR1_IN1, LOW);
-  digitalWrite(MOTOR1_IN2, LOW);
-  digitalWrite(MOTOR2_IN1, LOW);
-  digitalWrite(MOTOR2_IN2, LOW);
-  Serial.print("\nSTOP");
+/**
+ * @brief Stop both motors.
+ */
+void motor_driver::stop() {
+  setPWM(0, MOTOR1_IN2, MOTOR1_IN1);
+  setPWM(0, MOTOR2_IN2, MOTOR2_IN1);
+
+  Serial.println("Stopped both motors.");
 }
 
-motor_driver::motor_driver(){ //constructor to set pins at outputs
+/**
+ * @brief Constructor to set pins as outputs.
+ */
+motor_driver::motor_driver() {
   pinMode(MOTOR1_IN1, OUTPUT);
   pinMode(MOTOR1_IN2, OUTPUT);
   pinMode(MOTOR2_IN1, OUTPUT);
   pinMode(MOTOR2_IN2, OUTPUT);
 }
 
-motor_driver::~motor_driver(){
-//Empty
+motor_driver::~motor_driver() {
+  // Empty
 }
