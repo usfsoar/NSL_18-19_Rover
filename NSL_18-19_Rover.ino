@@ -44,7 +44,7 @@ void menu(char c) {
     case '1':
       Serial.print("Both High\n");
       digitalWrite(RELAY_1, HIGH);
-      digitalWrite(RELAY_2, LOW);
+      digitalWrite(RELAY_2, HIGH);
       break;
     case '2':
       Serial.print("Both Low\n");
@@ -53,11 +53,9 @@ void menu(char c) {
       break;
     case 'q':
     Serial.print("Rover Deploy\n");
-    delay(120000);
+    delay(120000)
     Serial.print("Forward!\n");
     motor.setSpeedPercent(100, 100);
-    digitalWrite(RELAY_1, LOW);
-    digitalWrite(RELAY_2, LOW);
     break;
   }
 }
