@@ -32,6 +32,8 @@ void menu(char c) {
       digitalWrite(SOL_1, HIGH);
       delay(1000);
       digitalWrite(MOTOR_1, HIGH);
+      delay(3000);
+      digitalWrite(SOL_1, LOW);
       break;
     case ' ':
       Serial.print("Emergency Stop\n");
