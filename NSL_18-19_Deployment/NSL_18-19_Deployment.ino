@@ -29,14 +29,14 @@ void menu(char c) {
   switch (c) {
     case 'q':
       Serial.print("Deployment Started\n");
-      digitalWrite(SOL_1, LOW);
+      digitalWrite(SOL_1, HIGH);
       delay(1000);
-      digitalWrite(MOTOR_1, LOW);
+      digitalWrite(MOTOR_1, HIGH);
       break;
     case ' ':
       Serial.print("Emergency Stop\n");
-      digitalWrite(SOL_1, HIGH);
-      digitalWrite(MOTOR_1, HIGH);
+      digitalWrite(SOL_1, LOW);
+      digitalWrite(MOTOR_1, LOW);
       break;
   }
 }

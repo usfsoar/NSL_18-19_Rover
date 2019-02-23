@@ -6,9 +6,9 @@
 #include "motor_driver.h"
 #include <Arduino.h>
 
-const byte MOTOR1_IN1 = 8;
+const byte MOTOR1_IN1 = 8; //MOTOR 1 as LEFT
 const byte MOTOR1_IN2 = 9;
-const byte MOTOR2_IN1 = 10;
+const byte MOTOR2_IN1 = 10; //MOTOR 2 as RIGHT
 const byte MOTOR2_IN2 = 11;
 
 /**

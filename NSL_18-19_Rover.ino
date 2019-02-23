@@ -47,7 +47,7 @@ void menu(char c) {
       Serial.print("Vacuum OFF\n");
       digitalWrite(VAC, HIGH);
       break;
-    case 'q':
+    case 'q': //Case used for rover deployment, countdowns in 30min intervals
     Serial.print("Rover Deploy In 2MIN\n");
     delay(30000);
     Serial.print("1MIN 30SEC LEFT\n");
