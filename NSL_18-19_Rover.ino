@@ -51,6 +51,14 @@ void menu(char c) {
       digitalWrite(RELAY_1, LOW);
       digitalWrite(RELAY_2, LOW);
       break;
+    case 'q':
+    Serial.print("Rover Deploy\n");
+    delay(120000);
+    Serial.print("Forward!\n");
+    motor.setSpeedPercent(100, 100);
+    digitalWrite(RELAY_1, LOW);
+    digitalWrite(RELAY_2, LOW);
+    break;
   }
 }
 
