@@ -7,6 +7,7 @@
 const byte SOL_1 = 9;
 const byte MOTOR_1 = 10;
 
+xbee xb;
 /**
  * @brief Automatically runs when Arduino initializes.
  */
@@ -14,7 +15,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("NSL 18-19 Deployment Test\n");
 
-  pinMode(RELAY_1, OUTPUT);
+  pinMode(SOL_1, OUTPUT);
   pinMode(MOTOR_1, OUTPUT);
 }
 
@@ -28,8 +29,8 @@ void menu(char c) {
   switch (c) {
     case 'q':
       Serial.print("Deployment Started\n");
-      digitalWriteSOL_1, HIGH);
-      delay(1000)
+      digitalWrite(SOL_1, HIGH);
+      delay(1000);
       digitalWrite(MOTOR_1, HIGH);
       break;
     case ' ':
