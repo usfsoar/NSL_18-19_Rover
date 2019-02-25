@@ -15,8 +15,7 @@ Download all the files and compile `nsl_rover_18-19.ino` using the Arduino IDE.
 | MOTOR1 - INPUT2 | 9   | Motor #1 PWM     |
 | MOTOR2 - INPUT1 | 10  | Motor #2 PWM     |
 | MOTOR2 - INPUT2 | 11  | Motor #2 PWM     |
-| RELAY1          | 4   | Relay #1 Control |
-| RELAY2          | 5   | Relay #2 Control |
+| VAC             | 12  | Vacuum Control   |
 
 ## Organization
 
