@@ -1,3 +1,7 @@
+/**
+ * @file NSL_18-19_Deployment.ino
+ * @brief Main arduino file for the deployment system used for the NSL_18-19 competition
+ */
 #include <Arduino.h>
 #include "xbee.h"
 
