@@ -6,9 +6,9 @@
 #include "motor_driver.h"
 #include <Arduino.h>
 
-const byte MOTOR1_IN1 = 8;
+const byte MOTOR1_IN1 = 8; //MOTOR 1 as LEFT
 const byte MOTOR1_IN2 = 9;
-const byte MOTOR2_IN1 = 10;
+const byte MOTOR2_IN1 = 10; //MOTOR 2 as RIGHT
 const byte MOTOR2_IN2 = 11;
 
 /**
@@ -84,12 +84,12 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
   int leftSpeed = convertPercent(leftPercent);
   int rightSpeed = convertPercent(rightPercent);
 
-  Serial.println("Setting left motor to: ");
+  Serial.print("Left M: ");
   Serial.print(leftPercent);
-  Serial.print("%%");
-  Serial.println("Setting right motor to: ");
+  Serial.println("%");
+  Serial.print("Right M: ");
   Serial.print(rightPercent);
-  Serial.print("%%");
+  Serial.println("%");
 
   setSpeedPWM(leftSpeed, rightSpeed);
 }
@@ -107,10 +107,10 @@ void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
   int truncatedLeftPWM = setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
   int truncatedRightPWM = setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
 
-  Serial.println("Set left motor PWM to: ");
-  Serial.print(truncatedLeftPWM);
-  Serial.println("Set right motor PWM to: ");
-  Serial.print(truncatedRightPWM);
+  Serial.print("Left PWM : ");
+  Serial.println(truncatedLeftPWM);
+  Serial.print("Right PWM: ");
+  Serial.println(truncatedRightPWM);
 }
 
 /**
@@ -120,7 +120,7 @@ void motor_driver::stop() {
   setPWM(0, MOTOR1_IN2, MOTOR1_IN1);
   setPWM(0, MOTOR2_IN2, MOTOR2_IN1);
 
-  Serial.println("Stopped both motors.");
+  Serial.println("Stopped");
 }
 
 /**

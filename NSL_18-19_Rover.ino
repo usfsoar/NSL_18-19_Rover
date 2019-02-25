@@ -2,8 +2,7 @@
 #include "motor_driver.h"
 #include "xbee.h"
 
-const byte RELAY_1 = 4;
-const byte RELAY_2 = 5;
+const byte VAC = 12;
 
 motor_driver motor;
 xbee xb;
@@ -15,8 +14,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("NSL 18-19 Test\n");
 
-  pinMode(RELAY_1, OUTPUT);
-  pinMode(RELAY_2, OUTPUT);
+  pinMode(VAC, OUTPUT);
 }
 
 /**
@@ -42,15 +40,25 @@ void menu(char c) {
       motor.stop();
       break;
     case '1':
-      Serial.print("Both High\n");
-      digitalWrite(RELAY_1, HIGH);
-      digitalWrite(RELAY_2, LOW);
+      Serial.print("Vacuum ON\n");
+      digitalWrite(VAC, LOW);
       break;
     case '2':
-      Serial.print("Both Low\n");
-      digitalWrite(RELAY_1, LOW);
-      digitalWrite(RELAY_2, LOW);
+      Serial.print("Vacuum OFF\n");
+      digitalWrite(VAC, HIGH);
       break;
+    case 'q': //Case used for rover deployment, countdowns in 30min intervals
+    Serial.print("Rover Deploy In 2MIN\n");
+    delay(30000);
+    Serial.print("1MIN 30SEC LEFT\n");
+    delay(30000);
+    Serial.print("1MIN LEFT\n");
+    delay(30000);
+    Serial.print("30SEC LEFT\n");
+    delay(30000);
+    Serial.print("Forward!\n");
+    motor.setSpeedPercent(100, 100);
+    break;
   }
 }
 
