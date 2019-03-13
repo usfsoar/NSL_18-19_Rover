@@ -48,17 +48,17 @@ void menu(char c) {
       digitalWrite(VAC, HIGH);
       break;
     case 'q': //Case used for rover deployment, countdowns in 30min intervals
-    Serial.print("Rover Deploy In 2MIN\n");
-    delay(30000);
-    Serial.print("1MIN 30SEC LEFT\n");
-    delay(30000);
-    Serial.print("1MIN LEFT\n");
-    delay(30000);
-    Serial.print("30SEC LEFT\n");
-    delay(30000);
-    Serial.print("Forward!\n");
-    motor.setSpeedPercent(100, 100);
-    break;
+      Serial.print("Rover Deploy In 2MIN\n");
+      delay(30000);
+      Serial.print("1MIN 30SEC LEFT\n");
+      delay(30000);
+      Serial.print("1MIN LEFT\n");
+      delay(30000);
+      Serial.print("30SEC LEFT\n");
+      delay(30000);
+      Serial.print("Forward!\n");
+      motor.setSpeedPercent(100, 100);
+      break;
   }
 }
 
