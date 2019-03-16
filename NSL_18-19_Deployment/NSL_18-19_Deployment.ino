@@ -33,6 +33,7 @@ void menu(char c) {
   switch (c) {
     case 'q':
       Serial.print("Deployment Started\n");
+      delay(10000);
       digitalWrite(SOL_1, HIGH);
       delay(1000);
       digitalWrite(MOTOR_1, HIGH);

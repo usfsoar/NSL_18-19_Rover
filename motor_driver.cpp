@@ -6,10 +6,10 @@
 #include "motor_driver.h"
 #include <Arduino.h>
 
-const byte MOTOR1_IN1 = 8; //MOTOR 1 as LEFT
-const byte MOTOR1_IN2 = 9;
-const byte MOTOR2_IN1 = 10; //MOTOR 2 as RIGHT
-const byte MOTOR2_IN2 = 11;
+const byte MOTOR1_IN1 = 13; //MOTOR 1 as LEFT
+const byte MOTOR1_IN2 = 12;
+const byte MOTOR2_IN1 = 11; //MOTOR 2 as RIGHT
+const byte MOTOR2_IN2 = 10;
 
 /**
  * @brief Set PWM output. Allows for separate positive and negative outputs.
