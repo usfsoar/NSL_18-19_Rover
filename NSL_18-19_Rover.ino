@@ -2,7 +2,7 @@
 #include "motor_driver.h"
 #include "xbee.h"
 
-const byte VAC = 12;
+const byte VAC = 9;
 
 motor_driver motor;
 xbee xb;
