@@ -68,4 +68,5 @@ void menu(char c) {
  */
 void loop() {
 menu(xb.readInput());
+delay(20);
 }

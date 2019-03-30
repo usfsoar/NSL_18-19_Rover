@@ -84,12 +84,12 @@ void motor_driver::setSpeedPercent(double leftPercent, double rightPercent) {
   int leftSpeed = convertPercent(leftPercent);
   int rightSpeed = convertPercent(rightPercent);
 
-  Serial.print("Left M: ");
+ /* Serial.print("Left M: ");
   Serial.print(leftPercent);
   Serial.println("%");
   Serial.print("Right M: ");
   Serial.print(rightPercent);
-  Serial.println("%");
+  Serial.println("%");*/
 
   setSpeedPWM(leftSpeed, rightSpeed);
 }
@@ -107,10 +107,10 @@ void motor_driver::setSpeedPWM(int leftPWM, int rightPWM) {
   int truncatedLeftPWM = setPWM(leftPWM, MOTOR1_IN2, MOTOR1_IN1);
   int truncatedRightPWM = setPWM(rightPWM, MOTOR2_IN2, MOTOR2_IN1);
 
-  Serial.print("Left PWM : ");
+  /*Serial.print("Left PWM : ");
   Serial.println(truncatedLeftPWM);
   Serial.print("Right PWM: ");
-  Serial.println(truncatedRightPWM);
+  Serial.println(truncatedRightPWM);*/
 }
 
 /**
@@ -120,7 +120,7 @@ void motor_driver::stop() {
   setPWM(0, MOTOR1_IN2, MOTOR1_IN1);
   setPWM(0, MOTOR2_IN2, MOTOR2_IN1);
 
-  Serial.println("Stopped");
+  //Serial.println("Stopped");
 }
 
 /**
