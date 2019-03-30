@@ -1,4 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "NSL_18-19_Rover.ino"
+    "sketch": "NSL_18-19_Rover.ino",
+    "port": "COM6"
 }

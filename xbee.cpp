@@ -6,6 +6,6 @@ char xbee::readInput(){
         c = Serial.read();
         return c;
     }else{
-      return '0';
+      return ' ';
     }
 }
