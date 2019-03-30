@@ -2,7 +2,7 @@
 #include "motor_driver.h"
 #include "xbee.h"
 
-const byte VAC = 9;
+const byte VAC = 12;
 
 motor_driver motor;
 xbee xb;
@@ -41,11 +41,11 @@ void menu(char c) {
       break;
     case '1':
       Serial.print("Vacuum ON\n");
-      digitalWrite(VAC, LOW);
+      digitalWrite(VAC, HIGH);
       break;
     case '2':
       Serial.print("Vacuum OFF\n");
-      digitalWrite(VAC, HIGH);
+      digitalWrite(VAC, LOW);
       break;
     case 'q': //Case used for rover deployment, countdowns in 30min intervals
       Serial.print("Rover Deploy In 2MIN\n");
@@ -67,6 +67,5 @@ void menu(char c) {
  *
  */
 void loop() {
-  menu(xb.readInput());
-  delay(10);
+menu(xb.readInput());
 }
