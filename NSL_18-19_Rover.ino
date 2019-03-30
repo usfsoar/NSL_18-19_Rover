@@ -28,13 +28,13 @@ void menu(char c) {
       motor.setSpeedPercent(100, 100);
       break;
     case 'a':
-      motor.setSpeedPercent(0, 100);
+      motor.setSpeedPercent(-100, 100);
       break;
     case 's':
       motor.setSpeedPercent(-100, -100);
       break;
     case 'd':
-      motor.setSpeedPercent(100, 0);
+      motor.setSpeedPercent(100, -100);
       break;
     case ' ':
       motor.stop();
